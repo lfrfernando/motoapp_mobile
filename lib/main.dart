@@ -44,8 +44,7 @@ class _homeState extends State<home> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  paginaPrincipal()));
+                              builder: (BuildContext context) => paginaPrincipal()));
                       print('Botao de entrar foi clicado');
                     },
                   ),

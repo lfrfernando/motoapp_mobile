@@ -4,27 +4,18 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:motoapp_faitec2021/entity/usuario.dart';
 import 'login_page.dart';
-
-const _request = "http://192.168.10.102:8082/api/v1/account/create";
-
+const _request = "http://192.168.0.110:8082/api/v1/account/create";
 
 class cadastroPage extends StatefulWidget {
   const cadastroPage({Key? key}) : super(key: key);
 
   set tipo(String tipo) {}
-
   set dataNascimento(String dataNascimento) {}
-
   set cpf(String cpf) {}
-
   set senha(String senha) {}
-
   set email(String email) {}
-
   set telefone(String telefone) {}
-
   set nomeCompleto(String nomeCompleto) {}
-
   set nomeUsuario(String nomeUsuario) {}
 
   @override
@@ -32,21 +23,16 @@ class cadastroPage extends StatefulWidget {
 }
 
 class _cadastroPageState extends State<cadastroPage> {
+
   Future<void> criaUsuario(Usuario user) async {
     var userJson = jsonEncode(user);
-
-    Uri url = Uri.parse(_request);
-    var response = await http.post(url);
-
-    /*http
-        .post(_request,
+    http
+        .post(Uri.parse(_request),
             headers: <String, String>{
               'Content-Type': 'application/json',
             },
             body: userJson)
-        .then((http.Response response)*/
-        Usuario usuario = Usuario.fromJson(jsonDecode(response.body));
-    {
+        .then((http.Response response) {
       print(response.statusCode);
       if (response.statusCode == 201) {
         _showDialogSuccess();
@@ -54,9 +40,8 @@ class _cadastroPageState extends State<cadastroPage> {
       } else if (response.statusCode == 406) {
         _showDialogFailed();
       }
-    };
+    });
   }
-
   TextEditingController nomeUsuarioController = TextEditingController();
   TextEditingController nomeCompletoController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
@@ -68,13 +53,10 @@ class _cadastroPageState extends State<cadastroPage> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _infoText = "Informe seus Dados";
 
-
-
-
   void _resetFields() {
     setState(() {
-      nomeUsuarioController = "" as TextEditingController;
-      nomeCompletoController = "" as TextEditingController;
+      nomeUsuarioController.text = "";
+      nomeCompletoController.text = "";
       emailController.text = "";
       senhaController.text = "";
       cpfController.text = "";
@@ -171,34 +153,6 @@ class _cadastroPageState extends State<cadastroPage> {
                     },
                   ),
                   TextFormField(
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                        labelText: "Endereço:",
-                        labelStyle: TextStyle(color: Colors.deepOrange)),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.deepOrange, fontSize: 25.0),
-                    controller: nomeCompletoController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Insira seu Endereço!";
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                        labelText: "Telefone:",
-                        labelStyle: TextStyle(color: Colors.deepOrange)),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.deepOrange, fontSize: 25.0),
-                    controller: telefoneController,
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 6) {
-                        return "Insira seu Telefone!";
-                      }
-                    },
-                  ),
-                  TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                         labelText: "Email:",
@@ -228,7 +182,7 @@ class _cadastroPageState extends State<cadastroPage> {
                     },
                   ),
                   TextFormField(
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: "Cpf:",
                         labelStyle: TextStyle(color: Colors.deepOrange)),
@@ -241,8 +195,20 @@ class _cadastroPageState extends State<cadastroPage> {
                       }
                     },
                   ),
-
-
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                        labelText: "Telefone:",
+                        labelStyle: TextStyle(color: Colors.deepOrange)),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.deepOrange, fontSize: 25.0),
+                    controller: telefoneController,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 6) {
+                        return "Insira seu Telefone!";
+                      }
+                    },
+                  ),
                   TextFormField(
                     keyboardType: TextInputType.datetime,
                     decoration: const InputDecoration(
@@ -258,7 +224,7 @@ class _cadastroPageState extends State<cadastroPage> {
                     },
                   ),
                   TextFormField(
-                    keyboardType: TextInputType.datetime,
+                    keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                         labelText: "Cadastrar-se como?",
                         labelStyle: TextStyle(color: Colors.deepOrange)),
@@ -278,17 +244,16 @@ class _cadastroPageState extends State<cadastroPage> {
                   height: 50.0,
                   child: RaisedButton(
                     onPressed: () async {
-                      cadastroPage user = cadastroPage();
+                      Usuario user = Usuario(id: 0, nomeUsuario:"", nomeCompleto:"", senha:"", email:"",  tipo:"", telefone:"", cpf:"" );
                       user.nomeUsuario = nomeUsuarioController.text;
                       user.nomeCompleto = nomeCompletoController.text;
                       user.telefone = telefoneController.text;
                       user.email = emailController.text;
                       user.senha = senhaController.text;
                       user.cpf = cpfController.text;
-                      user.dataNascimento = dataNascimentoController.text;
-                      user.tipo = tipoController as String;
+                      user.tipo = tipoController.text;
                       if (_formKey.currentState!.validate()) {
-                       // criaUsuario(user);
+                        criaUsuario(user);
 
                       } else {
                         _showDialogFailed();

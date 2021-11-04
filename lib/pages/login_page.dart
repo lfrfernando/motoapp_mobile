@@ -1,21 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:motoapp_faitec2021/entity/dados_login.dart';
 import 'package:motoapp_faitec2021/entity/usuario.dart';
-import 'package:motoapp_faitec2021/pages/pagina_cliente.dart';
-import 'package:motoapp_faitec2021/pages/pagina_motoboy.dart';
+import 'pagina_cliente.dart';
+import 'pagina_motoboy.dart';
 
-const _request = "http://192.168.1.109:8082/api/v1/account/dologin";
+const _request = "http://192.168.0.110:8082/api/v1/account/doLogin";
 
 class loginPage extends StatefulWidget {
+
   late String email;
-
   late String senha;
-
-  //const loginPage({Key? key}) : super(key: key);
-  //set senha(String senha) {}
-  //set email(String email) {}
 
   @override
   _loginPageState createState() => _loginPageState();
@@ -27,10 +23,7 @@ class _loginPageState extends State<loginPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _infoText = "Informe seus Dados";
-
-  Object? get motoboy => null;
-
-  Object? get cliente => null;
+  String isCliente = "cliente";
 
   void _resetFields() {
     setState(() {
@@ -41,41 +34,35 @@ class _loginPageState extends State<loginPage> {
     });
   }
 
-  Future<void> efetuarLogin(loginPage usuario) async {
-    //var userJson = jsonEncode(Usuario);
+  Future<void> efetuarLogin(Usuario usuarioAux) async {
+    var userJson = jsonEncode(usuarioAux);
+    final response = await http.post(Uri.parse(_request),
+        headers: <String,String> {"Content-Type": "application/json"},
+        body: userJson);
 
-    Uri url = Uri.parse(_request);
-    var response = await http.post(url);
-
-    /*http.Response response = await http.post(_request,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-
-        body: userJson);*/
-    Usuario usuario = Usuario.                                   fromJson(jsonDecode(response.body));
+    Usuario usuario = Usuario.fromMap(jsonDecode(response.body));
     if (usuario.id != null) {
-      //_showDialogSuccessUsuario(usuario.tipo,usuario);
+      _showDialogSuccessUsuario(usuario.tipo,usuario);
       _resetFields();
     } else {
       _showDialogFailed();
     }
   }
 
-  void _showDialogSuccessUsuario(int tipoUsuario, Usuario user) {
+  void _showDialogSuccessUsuario( String tipoUsuario, Usuario usuarioAux) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        if (tipoUsuario == cliente) {
+        if (tipoUsuario.contains(isCliente)) {
           Future.delayed(const Duration(seconds: 3), () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => paginaCliente()));
           });
         }
-        if (tipoUsuario == motoboy) {
+        else {
           Future.delayed(const Duration(seconds: 3), () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => pagina_motoboy()));
+                MaterialPageRoute(builder: (context) => paginaMotoboy()));
           });
         }
         // retorna um objeto do tipo Dialog
@@ -93,7 +80,7 @@ class _loginPageState extends State<loginPage> {
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.of(context).pop();
         });
-        // retorna um objeto do tipo Dialog
+         //retorna um objeto do tipo Dialog
         return const AlertDialog(
           title: Text("Não foi possível efetuar o acesso!"),
         );
@@ -167,7 +154,7 @@ class _loginPageState extends State<loginPage> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          loginPage userLogin = loginPage();
+                          Usuario userLogin = Usuario(id: 0, nomeUsuario:"", nomeCompleto:"", senha:"", email:"",  tipo:"", telefone:"", cpf:"" );
                           userLogin.email = emailController.text;
                           userLogin.senha = senhaController.text;
                           efetuarLogin(userLogin);
@@ -185,8 +172,10 @@ class _loginPageState extends State<loginPage> {
                   ),
                 ],
               ),
-            )));
+            )
+        )
+    );
   }
 }
 
-pagina_motoboy() {}
+
