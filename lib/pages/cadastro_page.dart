@@ -141,7 +141,7 @@ class _cadastroPageState extends State<cadastroPage> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                        labelText: "Nome de Completo:",
+                        labelText: "Nome completo:",
                         labelStyle: TextStyle(color: Colors.deepOrange)),
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.deepOrange, fontSize: 25.0),
@@ -184,7 +184,7 @@ class _cadastroPageState extends State<cadastroPage> {
                   TextFormField(
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                        labelText: "Cpf:",
+                        labelText: "CPF:",
                         labelStyle: TextStyle(color: Colors.deepOrange)),
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.deepOrange, fontSize: 25.0),

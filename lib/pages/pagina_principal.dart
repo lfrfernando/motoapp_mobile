@@ -15,7 +15,7 @@ class _paginaPrincipalState extends State<paginaPrincipal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Bem vindo!"),
+        title: const Text("Bem_vindo(a)!"),
         centerTitle: true,
         backgroundColor: Colors.deepOrange,
       ),
@@ -32,10 +32,9 @@ class _paginaPrincipalState extends State<paginaPrincipal> {
               padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 20.0),
               child: const Text(
                 "\nEste aplicativo foi desenvolvido pensando em quem faz uso de serviços prestados por motoboys.\n"
-                "A plataforma conta tambem com uma aplicação WEB.\n"
-                "Nosso intuito é o de trazer mais segurança e comodidade a você que faz uso deste tipo de serviço,"
-                "contamos com motoboys capazes de prestar diversos tipos de serviços entre coletas, entregas, serviços "
-                "bancários, viagens inter municipais, inter estaduais e transporte de pessoas tudo com muita rapidez e "
+
+                "Nosso intuito é o de trazer mais segurança e comodidade a você que faz uso deste tipo de serviço, "
+                "interestaduais e intermunicipais tudo com muita rapidez e "
                     "segurança para quem contrata o serviço e para quem prestar.",
                 style: TextStyle(
                   fontSize: 18.0,
@@ -58,7 +57,7 @@ class _paginaPrincipalState extends State<paginaPrincipal> {
                       print('Botao login foi clicado');
                     },
                     icon: const Icon(Icons.person_outline),
-                    label: const Text('logar'),
+                    label: const Text('Fazer acesso'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.deepOrange)),
